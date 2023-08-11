@@ -24,14 +24,16 @@ Expense.init(
             }
         },
         amount: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DECIMAL,
             allowNull: false,
+            validate : {
+                isNumeric: true,
+            }
          
         },
         description: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
 
         },
         category: {

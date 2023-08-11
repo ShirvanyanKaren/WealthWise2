@@ -16,17 +16,37 @@ User.hasMany(Income, {
 });
 
 Income.belongsTo(User, {
-    foreignKey: 
+    foreignKey: 'user_budget_id',
 })
 
-User.hasMany(Expense. {
-    foreignKey: 'user_budget_id',
+User.hasMany(Expense, {
+    foreignKey: 'user_expense_id',
+});
+
+Expense.belongsTo(User, {
+    foreignKey: 'user_expense_id',
+});
+
+Budget.hasMany(Income, {
+    through: User,
+    foreignKey: 'user_income_id',
 });
 
 
+Income.belongsTo(Budget, {
+    through: User,
+    foreignKey: 'user_income_id',
+});
 
+Budget.hasMany(Expense, {
+    through: User,
+    foreignKey: 'user_expense_id',
+});
 
-
+Expense.belongsTo(Budget, {
+    through: User,
+    foreignKey: 'user_expense_id',
+});
 
 
 
