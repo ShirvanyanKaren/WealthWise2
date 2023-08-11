@@ -1,31 +1,38 @@
-require("dotenv").config();
+const path = require("path");
+const express = require("express");
+const exphbs = require("express-handlebars");
+const session = require("express-session");
+const helpers = require("./utils/helpers");
 
-const Sequelize = require("sequelize");
+const app = express();
+const PORT = process.env.PORT || 3001;
 
-const sequelize = process.env.JAWSDB_URL
-  ? new Sequelize(process.env.JAWSDB_URL)
-  : new Sequelize(
-      process.env.DB_NAME,
-      process.env.DB_USER,
-      process.env.DB_PASSWORD,
-      {
-        host: "localhost",
-        dialect: "mysql",
-        dialectOptions: {
-          decimalNumbers: true,
-        },
-      }
-  );
-    
-
-const checkAuthenticity = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
+const hours = 24;
+const sessionConfig = {
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * hours,
+  },
+  store: new SequelizeStore({
+    db: sequelize,
+  }),
 };
 
-checkAuthenticity();  
-module.exports = sequelize;
+app.use(session(sessionConfig));
+
+const hbs = exphbs.create({ helpers });
+
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use(require("./controllers/"));
+
+sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () => console.log("Now listening"));
+});
