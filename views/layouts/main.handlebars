@@ -1,0 +1,50 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WealthWise</title>
+    <meta name="description" content="A Tech Blog Website" />
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>CyberSphere</h1>
+      <nav>
+        <ul>
+          <section class="nav-links">
+            <li><a href="/"><span aria-hidden="true">Home</span></a></li>
+            {{#unless logged_in}}
+              <li><a href="/login"><span
+                    aria-hidden="true"
+                  >Login</span></a></li>
+              <li><a href="/signup"><span
+                    aria-hidden="true"
+                  >SignUp</span></a></li>
+            {{else}}
+              TODO: Placeholder needs to be updated for routes.
+              <li><a href="/dashboard"><span
+                    aria-hidden="true"
+                  >Dashboard</span></a></li>
+              <li><a href="/logout" id="logout"><span
+                    aria-hidden="true"
+                  >Logout</span></a></li>
+            {{/unless}}
+          </section>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      {{{body}}}
+    </main>
+    <footer>
+      <p>&copy; 2023 WealthWise</p>
+      <p>Created by Xiaoran Cai, Michael Mattingly, and Karen Shirvanyan</p>
+    </footer>
+    {{#if logged_in}}
+      <script src="/js/logout.js"></script>
+    {{/if}}
+  </body>
+</html>
