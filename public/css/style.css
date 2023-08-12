@@ -1,218 +1,221 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+:root {
+  /* Fonts */
+  --montserrat: "Montserrat", sans-serif;
+  --source-sans: "Source Sans 3", sans-serif;
+
+  /* Colors */
+  --light-purple: #b18dff;
+  --light-pink: #f8acff;
+  --light-blue: #5c7aff;
+  --off-white: #f5f4e5;
+  --black: #101010;
+
+  /* Effects */
+  --box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  --border: 1px solid var(--black);
+  --border-radius: 10px;
+}
+
+/* Font Selectors */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--montserrat);
+}
+
+p,
+a,
+li,
+span,
+input,
+textarea,
+button {
+  font-family: var(--source-sans);
+}
+
+/* Global Styles */
+main {
+  /* Photo by <a href="https://unsplash.com/@danielsessler?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Daniel Seßler</a> on <a href="https://unsplash.com/photos/a-bunch-of-hot-air-balloons-flying-in-the-sky-VfnOKRtY_5k?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>*/
+  background-image: url(../images/background.jpg);
+  background-size: cover;
+  height: 100vh;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+  color: var(--off-white);
+}
+
+a:hover {
+  color: var(--light-pink);
+}
+
+a:active {
+  color: var(--light-pink);
+}
+
+/* Header Styles */
+.header {
+  border-bottom: 1px solid var(--black);
+  background-color: var(--light-blue);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+}
+
+.hamburger {
+  display: none;
+}
+
+.line {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background-color: var(--off-white);
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-item {
+  margin-left: 5rem;
+}
+
+.nav-link {
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+.nav-link:hover {
+  color: var(--light-purple);
+}
+
+.nav-logo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--off-white);
+}
+
+/* Main Styles */
+.welcome-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--off-white);
+  border-radius: var(--border-radius);
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  width: 60%;
+  height: auto;
+}
+
+.welcome-text-container {
+  width: 50%;
+  padding: 2rem;
+}
+
+/* Footer Styles */
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--light-blue);
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--black);
+}
+
+footer p {
+  color: var(--off-white);
+}
+
+@media only screen and (max-width: 1250px) {
+  .welcome-page {
+    flex-direction: column;
+    text-align: center;
+    width: 80%;
+  }
+
+  .welcome-text-container {
+    width: 100%;
+    padding: 2rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  /* Nav Menu Styles */
+  .header {
+    position: fixed;
+    width: 100%;
+  }
+
+  .nav-menu {
+    position: absolute;
+    left: -100%;
+    top: 4.5rem;
+    flex-direction: column;
+    background-color: var(--off-white);
+    width: 100%;
+    border-radius: 0px 0px var(--border-radius) var(--border-radius);
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: var(--box-shadow);
+  }
+
+  .nav-menu.active {
+    left: 0;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
+
+  .nav-item {
+    margin: 2.5rem 0;
+  }
+
+  .hamburger {
+    display: block;
+    cursor: pointer;
+  }
+
+  .hamburger.active .line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active .line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .hamburger.active .line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  a {
+    color: var(--black);
+  }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    flex-direction: column;
+  }
+}

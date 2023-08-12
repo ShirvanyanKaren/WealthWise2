@@ -1,0 +1,78 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WealthWise</title>
+    <meta name="description" content="A Wealth Management Tracker" />
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&family=Source+Sans+3&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navbar">
+        <h1 class="nav-logo">WealthWise</h1>
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="/"><span
+                aria-hidden="true"
+              >Home</span></a></li>
+          {{#unless logged_in}}
+            <li class="nav-item"><a href="/login"><span
+                  aria-hidden="true"
+                >Login</span></a></li>
+            <li class="nav-item"><a href="/signup"><span
+                  aria-hidden="true"
+                >SignUp</span></a></li>
+          {{else}}
+            {{! TODO: Placeholder needs to be updated for routes. }}
+            <li class="nav-item"><a href="/dashboard"><span
+                  aria-hidden="true"
+                >Dashboard</span></a></li>
+            <li class="nav-item"><a href="/logout" id="logout"><span
+                  aria-hidden="true"
+                >Logout</span></a></li>
+          {{/unless}}
+        </ul>
+        <div class="hamburger">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      {{{body}}}
+    </main>
+    <footer>
+      <div>
+        <p>&copy; 2023 WealthWise</p>
+      </div>
+      <div class="footer-links">
+        <p>Created by
+          <a
+            class="footer-link"
+            href="https://www.linkedin.com/in/xrcai/"
+            target="_blank"
+          >Xiaoran Cai</a>,
+          <a
+            class="footer-link"
+            href="https://github.com/MeanBean87"
+            target="_blank"
+          >Michael Mattingly</a>, and
+          <a
+            class="footer-link"
+            href="https://github.com/ShirvanyanKaren"
+            target="_blank"
+          >Karen Shirvanyan</a></p>
+      </div>
+    </footer>
+    <script src="/js/index.js"></script>
+  </body>
+</html>
