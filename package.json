@@ -8,7 +8,7 @@
     "start": "node server.js",
     "seed": "node seeds/seed.js",
     "postinstall": "npm run seed",
-    "watch": "npm run watch"
+    "watch": "node server.js"
   },
   "keywords": [],
   "author": "",
