@@ -223,7 +223,7 @@ footer p {
   }
 }
 
-.create-budg-container {
+.budget-container {
   display: flex;
   justify-content: center;
   align-items: center; 
@@ -235,8 +235,7 @@ footer p {
   
 }
 
-.create-budg-container:after {
-  content:'';
+.budget-container:after {
   position: absolute;
   left: 0;
   top: 0;

@@ -1,7 +1,7 @@
  <section>
-<div class="create-budg-container">
-  <form class="form create-budget">
-    <div class="income">
+<div class="budget-container">
+  <div class="create-budget">
+    <form class="income">
         <h2>Income</h2>
       <label>Income Name</label>
       <input type="text" id="income-name" class="field" placeholder="Enter income name">
@@ -11,9 +11,9 @@
       <input type="text" id="income-category" class="field" placeholder="Enter category">
       <label>Description</label>
       <textarea class="field area" id="income-desc" placeholder="Enter income description"></textarea>
-      <button class="income-btn" type="button">Add Income</button>
-    </div>
-    <div class="expense">
+      <button class="income-btn" type="submit">Add Income</button>
+    </form>
+    <form class="expense">
       <h2>Expenses</h2>
       <label>Expense Name</label>
       <input type="text" id="expense-name"class="field" placeholder="Enter expense name">
@@ -23,11 +23,13 @@
       <input type="text" id="expense-category" class="field" placeholder="Enter category">
       <label>Description</label>
       <textarea class="field area" id="expense-desc" placeholder="Enter expense description"></textarea>
-      <button class="expense-btn" type="button">Add Expense</button>
-    </div>
-  </form>
+      <button class="expense-btn" type="submit">Add Expense</button>
+    </form>
+  </div>
 </div>
 </section> 
+
+
 
 <script src="/js/index.js"></script>
 <script src="/js/income.js"></script>

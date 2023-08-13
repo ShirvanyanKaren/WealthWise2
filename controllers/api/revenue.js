@@ -3,7 +3,7 @@ const { de } = require("@faker-js/faker");
 const {User, Income } = require('../../models');
 
 router.get('/', async (req, res) => {
-    try {
+    try { console.log(req)
         const incomeData = await Income.findAll({
             attributes: [
                 'id',
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
         res.status(500).json(err);
     }
 
-})
+});
 
 router.get('/:id', async (req, res) => {
     try {
@@ -66,14 +66,13 @@ router.get('/:id', async (req, res) => {
 
 // add withAuth
 router.post('/', async (req, res) => {
-    try {
+    try { console.log(req);
         const createIncome = await Income.create({
             income_name: req.body.income_name,
             description: req.body.description,
             amount: req.body.amount,
             category: req.body.category,
-            // use session id for this
-            user_income_id: req.body.user_income_id
+            user_income_id: req.session.user_id
         });
         console.log(createIncome);
         res.json(createIncome);
