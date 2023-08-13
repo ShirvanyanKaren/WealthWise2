@@ -5,7 +5,7 @@ const createUsersExpenses = async () => {
   const users = await User.findAll();
 
   for (const user of users) {
-    const expenses = [...Array(10)].map((expense) => ({
+    const expenses = [...Array()].map((expense) => ({
       expense_name: faker.commerce.productName(),
       user_expense_id: user.id,
       amount: faker.commerce.price(),

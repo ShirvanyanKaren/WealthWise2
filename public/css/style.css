@@ -33,7 +33,8 @@ li,
 span,
 input,
 textarea,
-button {
+button,
+label {
   font-family: var(--source-sans);
 }
 
@@ -130,6 +131,13 @@ a:active {
 .welcome-text-container {
   width: 50%;
   padding: 2rem;
+}
+
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Footer Styles */
