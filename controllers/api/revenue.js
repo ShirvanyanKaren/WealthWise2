@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { de } = require("@faker-js/faker");
 const {User, Income } = require('../../models');
 
 router.get('/', async (req, res) => {
@@ -32,7 +33,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const findIncome = findOne({
+        const findIncome = await Income.findOne({
             attributes: [
                 'id',
                 'income_name',
@@ -43,7 +44,7 @@ router.get('/:id', async (req, res) => {
                 'date'
             ],
             where: {
-                id: req.params.id
+                id: req.params.id,
             },
             include: [
                 {
@@ -55,6 +56,7 @@ router.get('/:id', async (req, res) => {
             }
         ],
         });
+        console.log(findIncome);
         res.json(findIncome);
     } catch (err) {
         res.status(500).json(err);
@@ -62,15 +64,18 @@ router.get('/:id', async (req, res) => {
 
 })
 
+// add withAuth
 router.post('/', async (req, res) => {
     try {
         const createIncome = await Income.create({
-            income_name: req.params.income_name,
-            description: req.params.description,
-            amount: req.params.amount,
-            category: req.params.category,
-            user_income_id: req.params.user_income_name
+            income_name: req.body.income_name,
+            description: req.body.description,
+            amount: req.body.amount,
+            category: req.body.category,
+            // use session id for this
+            user_income_id: req.body.user_income_id
         });
+        console.log(createIncome);
         res.json(createIncome);
     } catch (err) {
         console.log(err);
@@ -79,22 +84,28 @@ router.post('/', async (req, res) => {
 
 })
 
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const updateIncome = await Income.update({
-            income_name: req.params.income_name,
-            description: req.params.description,
-            amount: req.params.amount,
-            category: req.params.category
-        });
+                income_name: req.body.income_name,
+                description: req.body.description,
+                amount: req.body.amount,
+                category: req.body.category,
+            },
+            {
+                where: {
+                    id: req.params.id,
+                },
+            });
+        console.log(updateIncome);
         res.json(updateIncome);
     } catch (err) {
         res.status(500).json(err);
     }
-
 })
 
-router.delete('/', async (req, res) => {
+
+router.delete('/:id', async (req, res) => {
     try { 
         const deleteIncome = await Income.destroy({
             where: {
@@ -104,10 +115,11 @@ router.delete('/', async (req, res) => {
         if (!deleteIncome) {
             res.status(400).json({ message: 'No income with that id'})
           }
+          res.status(200).json(deleteIncome);
     } catch (err) {
         res.status(500).json('Error in finding income');
     }
 
-})
+});
 
 module.exports = router;
