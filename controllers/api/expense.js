@@ -63,15 +63,23 @@ router.get('/:id', async (req, res) => {
 
 });
 
+// add withAuth
 router.post('/', async (req, res) => {
     try {
         const createExpense = await Expense.create({
-
+            expense_name: req.body.expense_name,
+            description: req.body.description,
+            amount: req.body.amount,
+            category: req.body.category,
+            // use session id for this
+            user_expense_id: req.body.user_expense_id
         });
+        console.log(createExpense);
+        res.json(createExpense);
     } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
-
 
 })
 
