@@ -1,4 +1,3 @@
-const { json } = require("sequelize");
 
 const incomeFormHandler = async (event) => {
   event.preventDefault();
@@ -19,7 +18,7 @@ const incomeFormHandler = async (event) => {
       }),
     });
     if (response.ok) {
-        document.location.replace('/');
+        console.log('added income');
       } else {
         alert('Failed to add income');
       }

@@ -7,9 +7,10 @@ router.get('/', async (req, res) => {
     res.render('budget', {
         logged_in: req.session.logged_in,
     })
+    console.log(res);
   } catch (error) {
     res.status(500).json(error);
-  }
+  } 
   
 });
 
