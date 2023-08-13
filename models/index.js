@@ -9,15 +9,15 @@ User.hasMany(Budget, {
 
 Budget.belongsTo(User, {
     foreignKey: 'user_budget_id',
-})
+});
 
 User.hasMany(Income, {
-    foreignKey: 'user_budget_id',
+    foreignKey: 'user_income_id',
 });
 
 Income.belongsTo(User, {
-    foreignKey: 'user_budget_id',
-})
+    foreignKey: 'user_income_id',
+});
 
 User.hasMany(Expense, {
     foreignKey: 'user_expense_id',
@@ -28,31 +28,24 @@ Expense.belongsTo(User, {
 });
 
 Budget.hasMany(Income, {
-    through: User,
-    foreignKey: 'user_income_id',
+    foreignKey: 'user_budget_id',
 });
 
-
 Income.belongsTo(Budget, {
-    through: User,
-    foreignKey: 'user_income_id',
+    foreignKey: 'user_budget_id',
 });
 
 Budget.hasMany(Expense, {
-    through: User,
-    foreignKey: 'user_expense_id',
+    foreignKey: 'user_budget_id',
 });
 
 Expense.belongsTo(Budget, {
-    through: User,
-    foreignKey: 'user_expense_id',
+    foreignKey: 'user_budget_id',
 });
-
-
 
 module.exports = {
     Budget,
     Income,
     Expense,
     User
-}
+};
