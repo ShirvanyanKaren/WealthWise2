@@ -64,7 +64,7 @@ router.get('/:id', useAuth, async (req, res) => {
 
 });
 
-// add withAuth
+
 router.post('/', useAuth, async (req, res) => {
     try {
         const createExpense = await Expense.create({
