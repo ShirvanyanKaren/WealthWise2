@@ -1,9 +1,13 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
-class Income extends Model {}
+class User extends Model {
+  checkPassword(loginPw) {
+    return bcrypt.compareSync(loginPw, this.password);
+  }
+}
 
-Income.init(
+User.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,54 +15,44 @@ Income.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    income_name: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         len: [1, 255],
       },
     },
-    user_income_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "user",
-        key: "id",
-      },
-    },
-
-    amount: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-      validate: {
-        isNumeric: true,
-      },
-    },
-    description: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
+        isEmail: true,
         len: [1, 255],
       },
     },
-    category: {
+    password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [1, 255],
+        len: [6, 255],
       },
-    },
-    date: {
-      type: DataTypes.DATE,
-      allowNull: true,
     },
   },
   {
+    hooks: {
+      async beforeCreate(newUserData) {
+        newUserData.password = await bcrypt.hash(newUserData.password, 10);
+        return newUserData;
+      },
+    },
     sequelize,
-    timestamps: true,
+    timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: "income",
+    modelName: "user",
   }
 );
 
-module.exports = Income;
+module.exports = User;

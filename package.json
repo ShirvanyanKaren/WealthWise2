@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "seed": "node seeds/seed.js",
-    "postinstall": "npm run seed"
+    "postinstall": "npm run seed",
+    "watch": "npm run watch"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,10 @@
     "express-session": "^1.17.3",
     "handlebars": "^4.7.8",
     "mysql2": "^3.6.0",
+    "nodemon": "^3.0.1",
     "sequelize": "^6.32.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
