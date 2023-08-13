@@ -35,7 +35,9 @@ input,
 textarea,
 button,
 label,
-#error-message {
+#error-message,
+.income-result,
+.expense-result {
   font-family: var(--source-sans);
 }
 
@@ -69,7 +71,7 @@ button:hover,
 button:focus {
   background-color: #b3d3ea;
   color: #2c5777;
-  box-shadow: var(--box-shadow)
+  box-shadow: var(--box-shadow);
 }
 
 button:active {
@@ -163,7 +165,14 @@ button:active {
   text-align: center;
 }
 
-.logout-confirm-container, .unauthorized-container {
+.income, .expense{
+  margin: 1rem;
+  width: 30%;
+}
+
+
+.logout-confirm-container,
+.unauthorized-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -186,10 +195,11 @@ button:active {
 }
 
 .form-group {
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
 }
 
-.login-form, .signup-form {
+.login-form,
+.signup-form {
   padding-top: 1rem;
 }
 
@@ -201,15 +211,20 @@ button:active {
   padding-top: 1rem;
 }
 
-.budget-container {
+.field {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  outline: none;
+  border: var(--border);
+  border-radius: 5px;
+  margin-bottom: 22px;
+  transition: 0.3s;
+}
+
+.create-budget-section {
   display: flex;
-  justify-content: center;
-  align-items: center; 
-  height: 60vh;
-  margin-bottom: 100px;
-  background-color: var(--light-blue);
-  border-radius: 10px;
-  color: var(--off-white);
+  justify-content: space-evenly;
+  width: 100vw;
 }
 
 /* Footer Styles */
@@ -237,50 +252,6 @@ footer p {
     width: 100%;
     padding: 2rem;
   }
-}
-
-.budget-container:after {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.create-budget {
-  max-width: 850px;
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center;
-  text-align: center;
-  
-}
-
-.create-budget h2{
-  position: relative;
-  margin-bottom: 20px;
-
-}
-
-.create-budget h2:after{
-  content: '';
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 800%);
-  height: 4px;
-  width: 50px;
-  border-radius: 2px;
-  background-color: var(--light-purple);
-}
-
-.field { 
-  width: 100%;
-  padding: 0.5rem 1rem;
-  outline: none;
-  border: var(--border);
-  border-radius: 5px;
-  margin-bottom: 22px;
-  transition: .3s;
 }
 
 @media only screen and (max-width: 768px) {
@@ -336,6 +307,20 @@ footer p {
 
   .login-form-container {
     width: 50%;
+  }
+
+  .create-budget-section{
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .income, .expense{
+    width: 80%;
+  }
+
+  .income {
+    margin-top: 5rem;
   }
 
   footer {
