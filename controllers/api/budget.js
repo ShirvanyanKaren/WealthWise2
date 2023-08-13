@@ -23,17 +23,15 @@ router.get('/', async (req, res) => {
                     model: Income,
                     attributes: [
                         'id',
-                        'user_income_id',
                         'amount',
-                        'dexcrition',
+                        'descrition',
                         'category',
                     ],
                     model: Expense,
                     attributes: [
                         'id',
-                        'user_expense_id',
                         'amount',
-                        'dexcrition',
+                        'descrition',
                         'category',
                     ]
                 }
@@ -51,7 +49,42 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const singleBudget = await Budget.findOne({
-            
+            where: {
+                id: user_budget_id
+            },
+            attributes: [
+                'id',
+                'budget_name',
+                'total_expense',
+                'total_income', 
+                'total_savings'
+            ],
+            include: [
+                {
+                model: User,
+                attributes: [
+                    'id',
+                    'username'
+                ], 
+                include: {
+                    model: Income,
+                    attributes: [
+                        'id',
+                        'amount',
+                        'descrition',
+                        'category',
+                    ],
+                    model: Expense,
+                    attributes: [
+                        'id',
+                        'amount',
+                        'descrition',
+                        'category',
+                    ]
+                }
+            },
+            ]
+
         })
     } catch (err) {
         res.status(500).json(err)
