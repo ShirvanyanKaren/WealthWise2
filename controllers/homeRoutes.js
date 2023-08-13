@@ -36,4 +36,16 @@ router.get("/logout", (req, res) => {
   }
 });
 
+router.get('/yes', async (req, res) => {
+  try {
+    res.render('budget', {
+        logged_in: req.session.logged_in,
+    })
+    console.log(res);
+  } catch (error) {
+    res.status(500).json(error);
+  } 
+  
+});
+
 module.exports = router;
