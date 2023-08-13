@@ -36,7 +36,7 @@ Expense.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [1, 255],
+        len: [0, 255],
       },
     },
     category: {
@@ -51,6 +51,14 @@ Expense.init(
     },
   },
   {
+    hooks: {
+      async beforeCreate(newExpenseData) {
+        if(newExpenseData.description === null) {
+          newExpenseData.description = "No description provided.";
+        }
+        return newExpenseData;
+      }
+    },
     sequelize,
     timestamps: false,
     freezeTableName: true,

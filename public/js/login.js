@@ -3,22 +3,44 @@ const loginFormHandler = async (event) => {
 
   const user = document.querySelector("#user-login").value.trim();
   const password = document.querySelector("#password-login").value.trim();
-  console.log(user, password);
+  const errorElement = document.querySelector("#error-message");
 
-  if (user && password) {
-    const response = await fetch("/api/user/login", {
-      method: "POST",
-      body: JSON.stringify({ user, password }),
-      headers: { "Content-Type": "application/json" },
-    });
+  try {
+    if (user && password) {
+      const response = await fetch("/api/user/login", {
+        method: "POST",
+        body: JSON.stringify({ user, password }),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    if (response.ok) {
-      document.location.replace("/");
-    } else {
-      alert("Failed to log in");
+      if (response.ok) {
+        document.location.replace("/");
+      } else {
+        let errorMessage = "";
+
+        switch (response.status) {
+          case 404:
+            errorMessage = "Invalid username or email.";
+            break;
+          case 401:
+            errorMessage = "Invalid password.";
+            break;
+          case 500:
+            errorMessage = "Server error.";
+            break;
+          default:
+            errorMessage = "Unknown error.";
+            break;
+        }
+
+        errorElement.textContent = errorMessage;
+      }
     }
+  } catch (err) {
+    console.log(err);
   }
 };
+
 document
   .querySelector(".login-form")
   .addEventListener("submit", loginFormHandler);
