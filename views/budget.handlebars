@@ -4,21 +4,25 @@
     <div class="income">
         <h2>Income</h2>
       <label>Income Name</label>
-      <input type="text" class="field" placeholder="Enter income name">
+      <input type="text" id="income-name" class="field" placeholder="Enter income name">
       <label>Income Amount</label>
-      <input type="text" class="field" placeholder="Enter income amount">
+      <input type="text" id="income-amount" class="field" placeholder="Enter income amount">
+      <label>Category</label>
+      <input type="text" id="income-category" class="field" placeholder="Enter category">
       <label>Description</label>
-      <textarea class="field area" placeholder="Enter income description"></textarea>
-      <button class="expense-btn" type="button">Add Income</button>
+      <textarea class="field area" id="income-desc" placeholder="Enter income description"></textarea>
+      <button class="income-btn" type="button">Add Income</button>
     </div>
     <div class="expense">
       <h2>Expenses</h2>
       <label>Expense Name</label>
-      <input type="text" class="field" placeholder="Enter expense name">
+      <input type="text" id="expense-name"class="field" placeholder="Enter expense name">
       <label>Expense Amount</label>
-      <input type="text" class="field" placeholder="Enter expense amount">
+      <input type="text" id="expense-amount" class="field" placeholder="Enter expense amount">
+      <label>Category</label>
+      <input type="text" id="expense-category" class="field" placeholder="Enter category">
       <label>Description</label>
-      <textarea class="field area" placeholder="Enter expense description"></textarea>
+      <textarea class="field area" id="expense-desc" placeholder="Enter expense description"></textarea>
       <button class="expense-btn" type="button">Add Expense</button>
     </div>
   </form>
@@ -26,3 +30,4 @@
 </section> 
 
 <script src="/js/index.js"></script>
+<script src="/js/income.js"></script>

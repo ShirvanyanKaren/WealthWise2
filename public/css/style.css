@@ -291,7 +291,7 @@ footer p {
 }
 
 
-
+.income-btn,
 .expense-btn {
   background-color: var(--off-white);
   border-radius: 3px;
@@ -309,16 +309,21 @@ footer p {
   touch-action: manipulation;
 }
 
+.income-btn:hover,
+.income-btn:focus,
 .expense-btn:hover,
 .expense-btn:focus {
   background-color: #b3d3ea;
   color: #2c5777;
 }
 
+
+.income-btn:focus,
 .expense-btn:focus {
   box-shadow: 0 0 0 4px rgba(0, 149, 255, .15);
 }
 
+.income-btnactiv,
 .expense-btn:active {
   background-color: #a0c7e4;
   box-shadow: none;
