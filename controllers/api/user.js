@@ -22,72 +22,37 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// router.post("/login", async (req, res) => {
-//   try {
-//     console.log(req.body);
-//     const userData = await User.findOne({
-//       where: {
-//         [Op.or]: [{ email: req.body.user }, { username: req.body.user }],
-//       },
-//     });
-
-//     if (!userData) {
-//       res
-//         .status(404)
-//         .json({ message: "Username/Email not found, please try again" });
-//       return;
-//     }
-//     const validPassword = await userData.checkPassword(req.body.password);
-//     if (!validPassword) {
-//       res
-//         .status(401)
-//         .json({ message: "Incorrect password, please try again" });
-//       return;
-//     }
-//     req.session.save(() => {
-//       req.session.user_id = userData.id;
-//       req.session.logged_in = true;
-//       res.status(200).json({ user: userData, message: "You are now logged in!" });
-//     });
-
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
-    const dbUserData = await User.findAll({
+    console.log(req.body);
+    const userData = await User.findOne({
       where: {
-        user: req.body.user,
+        [Op.or]: [{ email: req.body.user }, { username: req.body.user }],
       },
     });
-
-    if (!dbUserData) {
+    console.log(userData);
+    if (!userData) {
       res
-        .status(400)
-        .json({ message: 'Incorrect email or password. Please try again!' });
+        .status(404)
+        .json({ message: "Username/Email not found, please try again" });
       return;
     }
-
-    const validPassword = await dbUserData.checkPassword(req.body.password);
-
+    const validPassword = await userData.checkPassword(req.body.password);
     if (!validPassword) {
-      res
-        .status(400)
-        .json({ message: 'Incorrect email or password. Please try again!' });
+      res.status(401).json({ message: "Incorrect password, please try again" });
       return;
     }
+
+    console.log("valid Password");
 
     req.session.save(() => {
-      req.session.loggedIn = true;
-
+      req.session.user_id = userData.id;
+      req.session.logged_in = true;
       res
         .status(200)
-        .json({ user: dbUserData, message: 'You are now logged in!' });
+        .json({ user: userData, message: "You are now logged in!" });
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });

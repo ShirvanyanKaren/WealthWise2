@@ -135,9 +135,33 @@ a:active {
 
 .login-form-container {
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: var(--off-white);
+  border-radius: var(--border-radius);
+  border: var(--border);
+  box-shadow: var(--box-shadow);
+  width: auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.form-input {
+  text-align: center;
+}
+
+.login-form {
+  padding-top: 1rem;
+}
+
+.form-btn-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  padding-top: 1rem;
 }
 
 /* Footer Styles */
@@ -216,6 +240,10 @@ footer p {
 
   a {
     color: var(--black);
+  }
+
+  .login-form-container {
+    width: 50%;
   }
 
   footer {
