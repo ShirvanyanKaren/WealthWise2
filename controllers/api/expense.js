@@ -71,8 +71,7 @@ router.post('/', async (req, res) => {
             description: req.body.description,
             amount: req.body.amount,
             category: req.body.category,
-            // use session id for this
-            user_expense_id: req.body.user_expense_id
+            user_expense_id: req.session.user_id
         });
         console.log(createExpense);
         res.json(createExpense);
