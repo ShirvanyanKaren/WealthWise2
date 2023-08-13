@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
         res.status(500).json(err);
     }
 
-})
+});
 
 router.put('/:id', async (req, res) => {
     try {
@@ -106,18 +106,23 @@ router.put('/:id', async (req, res) => {
         console.log(err);
         res.status(500).json(err);
     }
-})
+});
 
 router.delete('/:id', async (req, res) => {
-    try {
+    try { 
         const deleteExpense = await Expense.destroy({
-
+            where: {
+                id: req.params.id
+            },
         });
+        if (!deleteExpense) {
+            res.status(400).json({ message: 'No expense with that id'})
+          } 
+          res.status(200).json(deleteExpense);
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json('Error in finding expense');
     }
 
-
-})
+});
 
 module.exports = router;
