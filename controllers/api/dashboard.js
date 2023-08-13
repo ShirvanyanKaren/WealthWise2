@@ -4,11 +4,12 @@ const { Blog, Comment, User } = require('../../models');
 
 router.get('/', async (req, res) => {
   try {
-    const blogData = await Blog.findAll({include:[Comment]});
-    console.log(blogData)
-    res.status(200).json(blogData);
+    
+    res.render('createbudget')
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(err);
   }
   
 });
+
+module.exports = router;
