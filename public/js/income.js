@@ -33,7 +33,6 @@ const incomeFormHandler = async (event) => {
   }
 };
 
-
 document
   .querySelector(".income")
   .addEventListener("submit", incomeFormHandler);

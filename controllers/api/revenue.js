@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const { de } = require("@faker-js/faker");
-const {User, Income } = require('../../models');
+const { User, Income } = require('../../models');
+const { useAuth } = require('../../utils/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', useAuth, async (req, res) => {
     try { console.log(req)
         const incomeData = await Income.findAll({
             attributes: [
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', useAuth, async (req, res) => {
     try {
         const findIncome = await Income.findOne({
             attributes: [
@@ -65,7 +65,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // add withAuth
-router.post('/', async (req, res) => {
+router.post('/', useAuth, async (req, res) => {
     try { console.log(req);
         const createIncome = await Income.create({
             income_name: req.body.income_name,
@@ -83,7 +83,7 @@ router.post('/', async (req, res) => {
 
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', useAuth, async (req, res) => {
     try {
         const updateIncome = await Income.update({
                 income_name: req.body.income_name,
@@ -104,7 +104,7 @@ router.put('/:id', async (req, res) => {
 })
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', useAuth, async (req, res) => {
     try { 
         const deleteIncome = await Income.destroy({
             where: {

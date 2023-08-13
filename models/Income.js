@@ -37,7 +37,7 @@ Income.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [1, 255],
+        len: [0, 255],
       },
     },
     category: {
@@ -53,6 +53,14 @@ Income.init(
     },
   },
   {
+    hooks: {
+      async beforeCreate(newIncomeData) {
+        if(newIncomeData.description === null) {
+          newIncomeData.description = "No description provided.";
+        }
+        return newIncomeData;
+      }
+    },
     sequelize,
     timestamps: true,
     freezeTableName: true,

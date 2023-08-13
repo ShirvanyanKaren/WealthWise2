@@ -1,7 +1,8 @@
 const router = require("express").Router();
-const {User, Expense } = require('../../models');
+const { User, Expense } = require('../../models');
+const { useAuth } = require('../../utils/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', useAuth, async (req, res) => {
     try {
         const expenseData = await Expense.findAll({
             attributes: [
@@ -30,7 +31,7 @@ router.get('/', async (req, res) => {
 
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', useAuth, async (req, res) => {
     try {
         const findExpense = await Expense.findOne({
             attributes: [
@@ -64,7 +65,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // add withAuth
-router.post('/', async (req, res) => {
+router.post('/', useAuth, async (req, res) => {
     try {
         const createExpense = await Expense.create({
             expense_name: req.body.expense_name,
@@ -82,7 +83,7 @@ router.post('/', async (req, res) => {
 
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', useAuth, async (req, res) => {
     try {
         const updateExpense = await Expense.update({
                 expense_name: req.body.expense_name,
@@ -107,7 +108,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', useAuth, async (req, res) => {
     try { 
         const deleteExpense = await Expense.destroy({
             where: {
