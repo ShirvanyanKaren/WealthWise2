@@ -83,16 +83,29 @@ router.post('/', async (req, res) => {
 
 })
 
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const updateExpense = await Expense.findAll({
-
-        });
+        const updateExpense = await Expense.update({
+                expense_name: req.body.expense_name,
+                description: req.body.description,
+                amount: req.body.amount,
+                category: req.body.category,
+                
+            },
+            {
+                where: {
+                    id: req.params.id,
+                },
+            });
+             if (updateExpense[0] === 0) {
+                res.status(400).json({ message: 'Please provide a name, category, and amount to the expense'})
+              }
+        console.log(updateExpense);
+        res.json(updateExpense);
     } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
-
-
 })
 
 router.delete('/:id', async (req, res) => {
