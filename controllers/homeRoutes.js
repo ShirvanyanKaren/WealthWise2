@@ -16,11 +16,21 @@ router.use("/login", (req, res) => {
     return;
   }
   res.render("login");
+});
 
-router.get("/signup", async (req, res) => {
+router.get("/signup", (req, res) => {
   try {
-    res.render("signup", {
-      })
+    res.render("signup");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/logout", (req, res) => {
+  try {
+    req.session.destroy(() => {
+      res.render("logoutconfirm");
+    });
   } catch (err) {
     res.status(500).json(err);
   }

@@ -16,7 +16,6 @@ const sequelize = process.env.JAWSDB_URL
         },
       }
   );
-    
 
 const checkAuthenticity = async () => {
   try {

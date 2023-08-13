@@ -24,7 +24,7 @@
                 aria-hidden="true"
               >Home</span></a></li>
           {{#unless logged_in}}
-            <li class="nav-item"><a href="/login"><span
+            <li class="nav-item"><a href="/login" id="login"><span
                   aria-hidden="true"
                 >Login</span></a></li>
             <li class="nav-item"><a href="/signup"><span
@@ -35,7 +35,7 @@
             <li class="nav-item"><a href="/dashboard"><span
                   aria-hidden="true"
                 >Dashboard</span></a></li>
-            <li class="nav-item"><a href="/logout" id="logout"><span
+            <li class="nav-item"><a href="/logout"><span
                   aria-hidden="true"
                 >Logout</span></a></li>
           {{/unless}}

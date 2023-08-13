@@ -1,21 +1,23 @@
-<h2 class="m-2 p-2">Signup</h2>
-<form class="form signup-form">
-  <div class="form-group m-2 p-2">
-    <label for="email-signup">name:</label>
-    <input class="form-input" type="text" id="signup_name" />
-  </div>
-  <div class="form-group m-2 p-2">
-    <label for="email-signup">email:</label>
-    <input class="form-input" type="text" id="signup_email" />
-  </div>
-  <div class="form-group m-2 p-2">
-    <label for="password-signup">password:</label>
-    <input class="form-input" type="password" id="signup_password" />
-  </div>
-  <div class="form-group m-2 p-2">
-    <button class="btn btn-primary" type="submit">save
-    </button>
-  </div>
-</form>
+<section class="form-container">
+  <h2>Signup</h2>
+  <form class="form signup-form">
+      <label for="signup-name">User Name</label>
+    <div class="form-group m-2 p-2">
+      <input class="form-input" type="text" id="signup-name" />
+    </div>
+      <label for="signup-email">Email</label>
+    <div class="form-group m-2 p-2">
+      <input class="form-input" type="text" id="signup-email" />
+    </div>
+      <label for="signup-password">Password</label>
+    <div class="form-group m-2 p-2">
+      <input class="form-input" type="password" id="signup-password" />
+    </div>
+    <div class="form-btn-container">
+      <button class="btn btn-primary" type="submit">Submit</button>
+      <button type="button" href="/login">Login</button>
+    </div>
+  </form>
+</section>
 
 <script src="/js/signup.js"></script>
