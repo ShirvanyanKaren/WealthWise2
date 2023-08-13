@@ -54,11 +54,26 @@ Income.init(
   {
     hooks: {
       async beforeCreate(newIncomeData) {
-        if(newIncomeData.description === null) {
+        if (newIncomeData.description === null) {
           newIncomeData.description = "No description provided.";
         }
+        if (newIncomeData.description.length > 255) {
+          newIncomeData.description = newIncomeData.description.substring(
+            0,
+            255
+          );
+        }
+        if (newIncomeData.description.length < 1) {
+          newIncomeData.description = "No description provided.";
+        }
+        if (newIncomeData.amount === null) {
+          newIncomeData.amount = 0.00;
+        }
+        if (typeof newIncomeData.amount === "number") {
+          newIncomeData.amount = parseFloat(newIncomeData.amount).toFixed(2);
+        }
         return newIncomeData;
-      }
+      },
     },
     sequelize,
     timestamps: true,
