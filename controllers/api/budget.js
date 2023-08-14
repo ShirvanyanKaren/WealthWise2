@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { Model } = require("sequelize");
 const { User, Expense, Income, Budget } = require("../../models");
 const { useAuth } = require("../../utils/auth");
+const { findAll } = require("../../models/Budget");
 
 router.get("/", async (req, res) => {
   try {
@@ -116,10 +117,34 @@ router.put("/:id", async (req, res) => {
     console.log(incomeData, expenseData);
     const totalIncome = incomeData 
     const totalExpense = expenseData 
-
     const totalSavings = totalIncome - totalExpense;
     console.log(totalExpense);
-     console.log(totalIncome);
+    console.log(totalIncome);
+     
+    const [budgetData] = await Promise.all([
+      Expense.findAll({
+        attributes: ['category', 'amount'], 
+        where: { budget_id: req.session.budget_id }
+      })
+    ]);
+    
+    const totalExpenses = budgetData.reduce((result, expense) => {
+      const existingCategory = result.find(item => item.category === expense.category);
+    
+      if (existingCategory) {
+        existingCategory.sum += expense.amount;
+      } else {
+        result.push({ category: expense.category, sum: expense.amount });
+      }
+    
+      return result;
+    }, []);
+    
+    console.log('totalExpenses:', totalExpenses);
+    
+    
+
+
     const createBudget = await Budget.update(
        {
          user_budget_id: req.session.user_id,

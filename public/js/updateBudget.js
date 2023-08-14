@@ -10,15 +10,15 @@ const updateBudgetHandler = async (event) => {
             const sessionData = await sessionResponse.json();
             console.log(sessionData);
 
-            
             const response = await fetch(`/api/budget/${sessionData.budget_id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
             });
 
             if (response.ok) {
-                
+                // add pahe to go to
             } else {
+                // error handling
             }
         } else {
 
