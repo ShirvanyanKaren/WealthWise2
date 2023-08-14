@@ -34,6 +34,3 @@ const signup = async (event) => {
 };
 
 document.querySelector(".signup-form").addEventListener("submit", signup);
-document.querySelector("#login").addEventListener("click", function () {
-  document.location.replace("/login");
-});
