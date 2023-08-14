@@ -8,7 +8,7 @@ const signup = async (event) => {
     email: document.querySelector("#signup-email").value,
     password: document.querySelector("#signup-password").value,
   });
-
+  
   try {
     const response = await fetch("/api/user/signup", {
       method: "POST",

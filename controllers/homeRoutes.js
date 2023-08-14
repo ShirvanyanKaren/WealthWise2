@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { useAuth } = require("../utils/auth");
 
 router.get("/", async (req, res) => {
   try {
@@ -18,15 +19,7 @@ router.use("/login", (req, res) => {
   res.render("login");
 });
 
-router.get("/signup", (req, res) => {
-  try {
-    res.render("signup");
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.get("/logout", (req, res) => {
+router.get("/logout", useAuth, (req, res) => {
   try {
     req.session.destroy(() => {
       res.render("logoutconfirm");
@@ -36,16 +29,23 @@ router.get("/logout", (req, res) => {
   }
 });
 
-router.get('/yes', async (req, res) => {
+router.get("/signup", (req, res) => {
   try {
-    res.render('budget', {
-        logged_in: req.session.logged_in,
-    })
-    console.log(res);
-  } catch (error) {
-    res.status(500).json(error);
-  } 
-  
+    res.render("signup");
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
+
+router.get("/items", useAuth, async (req, res) => {
+  try {
+    res.render("items", {
+      logged_in: req.session.logged_in,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 module.exports = router;

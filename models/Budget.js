@@ -27,21 +27,18 @@ Budget.init(
     },
     total_expense: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
       validate: {
         isNumeric: true,
       },
     },
     total_income: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
       validate: {
         isNumeric: true,
       },
     },
     total_savings: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
       validate: {
         isNumeric: true,
       },

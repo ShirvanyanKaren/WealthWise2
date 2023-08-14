@@ -200,7 +200,8 @@ button:active {
 }
 
 .login-form,
-.signup-form {
+.signup-form,
+.new-budget-form {
   padding-top: 1rem;
 }
 
@@ -260,6 +261,7 @@ footer p {
   .header {
     position: fixed;
     width: 100%;
+    z-index: 999;
   }
 
   .nav-menu {

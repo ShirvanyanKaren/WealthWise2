@@ -17,5 +17,22 @@ const signUpLinkHandler = async (event) => {
   document.location.replace("/signup");
 };
 
+const getTableData = async (path) => {
+  try {
+      const response = await fetch(path, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error(`Error fetching data. Status: ${response.status}`);
+      }
+  } catch (err) {
+      console.error("Error:", err);
+  }
+};
+
 hamburger.addEventListener("click", mobileMenu);
 navLink.forEach((n) => n.addEventListener("click", closeMenu));
