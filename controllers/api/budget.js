@@ -19,12 +19,16 @@ router.get("/", async (req, res) => {
         {
           model: User,
           attributes: ["id", "username"],
-          include: {
-            model: Income,
-            attributes: ["id", "amount", "description", "category"],
-            model: Expense,
-            attributes: ["id", "amount", "description", "category"],
-          },
+          include: [
+            {
+              model: Income,
+              attributes: ["id", "amount", "description", "category"],
+            },
+            {
+              model: Expense,
+              attributes: ["id", "amount", "description", "category"],
+            },
+          ],
         },
       ],
     });
@@ -37,9 +41,6 @@ router.get("/", async (req, res) => {
 router.get("/:id", useAuth, async (req, res) => {
   try {
     const singleBudget = await Budget.findOne({
-      where: {
-        id: user_budget_id,
-      },
       attributes: [
         "id",
         "budget_name",
@@ -47,23 +48,33 @@ router.get("/:id", useAuth, async (req, res) => {
         "total_income",
         "total_savings",
       ],
+      where: {
+        user_budget_id: req.params.id,
+      },
       include: [
         {
           model: User,
           attributes: ["id", "username"],
-          include: {
-            model: Income,
-            attributes: ["id", "amount", "descrition", "category"],
-            model: Expense,
-            attributes: ["id", "amount", "descrition", "category"],
-          },
+          include: [
+            {
+              model: Income,
+              attributes: ["id", "amount", "description", "category"],
+            },
+            {
+              model: Expense,
+              attributes: ["id", "amount", "description", "category"],
+            },
+          ],
         },
       ],
     });
+    res.json(singleBudget);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
+
 
 router.post("/", useAuth, async (req, res) => {
   try {
@@ -76,7 +87,7 @@ router.post("/", useAuth, async (req, res) => {
       const savedBudgets = foundBudgets.map((budget) =>
         budget.get({ plain: true })
       );
-    
+
       const budgetNameExists = savedBudgets.some(
         (budget) => budget.budget_name === req.body.newBudgetName
       );
@@ -86,7 +97,7 @@ router.post("/", useAuth, async (req, res) => {
         return;
       }
     }
- 
+
     const newBudget = await Budget.create({
       budget_name: req.body.newBudgetName,
       user_budget_id: req.session.user_id,
@@ -110,72 +121,116 @@ router.post("/", useAuth, async (req, res) => {
 });
 router.put("/:id", async (req, res) => {
   try {
-     const [incomeData, expenseData] = await Promise.all([
-       Income.sum("amount", { where: { budget_id: req.session.budget_id }}),
-      Expense.sum("amount", { where: { budget_id: req.session.budget_id }}),
-     ]);
+    const [incomeData, expenseData] = await Promise.all([
+      Income.sum("amount", { where: { budget_id: req.session.budget_id } }),
+      Expense.sum("amount", { where: { budget_id: req.session.budget_id } }),
+    ]);
     console.log(incomeData, expenseData);
-    const totalIncome = incomeData 
-    const totalExpense = expenseData 
+    const totalIncome = incomeData;
+    const totalExpense = expenseData;
     const totalSavings = totalIncome - totalExpense;
     console.log(totalExpense);
     console.log(totalIncome);
-     
+
     const [expenseByCat] = await Promise.all([
       Expense.findAll({
-        attributes: ['category', 'amount'], 
-        where: { budget_id: req.session.budget_id }
-      })
+        attributes: ["category", "amount"],
+        where: { budget_id: req.session.budget_id },
+      }),
     ]);
 
-    const [incomeByCat] = await Promise.all([
-      Expense.findAll({
-        attributes: ['category', 'amount'], 
-        where: { budget_id: req.session.budget_id }
-      })
-    ]);
-    
     const expenseSum = expenseByCat.reduce((result, expense) => {
-      const existingCategory = result.find(item => item.category === expense.category);
-  
+      const existingCategory = result.find(
+        (item) => item.category === expense.category
+      );
+
       if (existingCategory) {
-          existingCategory.sum += expense.amount;
+        existingCategory.sum += expense.amount;
       } else {
-       
-          result.push({ category: expense.category, sum: expense.amount}); 
+        result.push({ category: expense.category, sum: expense.amount });
       }
       return result;
-  }, []);
+    }, []);
 
-  const expRat = expenseSum.map(expense => ({
-    category: expense.category,
-    ratio: expense.sum / totalExpense
-  }));
+    const [incomeByCat] = await Promise.all([
+      Income.findAll({
+        attributes: ["category", "amount"],
+        where: { budget_id: req.session.budget_id },
+      }),
+    ]);
+
+    const incomeSum = incomeByCat.reduce((result, income) => {
+      const existingCategory = result.find(
+        (item) => item.category === income.category
+      );
+
+      if (existingCategory) {
+        existingCategory.sum += income.amount;
+      } else {
+        result.push({ category: income.category, sum: income.amount });
+      }
+      return result;
+    }, []);
+
+    const incRat = incomeSum.map((income) => ({
+      category: income.category,
+      ratio: income.sum / totalIncome,
+    }));
+
+    const expRat = expenseSum.map((expense) => ({
+      category: expense.category,
+      ratio: expense.sum / totalExpense,
+    }));
+
+    const budgetRat = expenseSum.map((expense) => ({
+      category: expense.category,
+      ratio: expense.sum / totalIncome,
+    }));
 
 
-  console.log('exp sum:', expenseSum);
-  console.log('exp ratios:', expRat);
-  
+    req.session.save(() => {
+      req.session.income = incRat,
+      req.session.expense = expRat,
+      req.session.budget = budgetRat,
+      req.session.logged_in = true;
+      res.status(200).json(incRat);
+      res.status(200).json(expRat);
+      res.status(200).json(budgetRat);
+    });
+
+    console.log('exp sum', expenseSum);
+
+    console.log('exp ratios:', expRat);
+
+    console.log("inc sum:", incomeSum);
+    
+    console.log("inc ratios:", incRat);
+
+    console.log('budg rat:', budgetRat);
+
+
+
+
     const createBudget = await Budget.update(
-       {
-         user_budget_id: req.session.user_id,
-         total_income: totalIncome,
-         total_expense: totalExpense,
-         total_savings: totalSavings,
-       },
-       {
-         where: {
-           id: req.params.id,
-         },
-       }
-     );
-     console.log(createBudget);
-     res.json(createBudget);
-   } catch (err) {
+      {
+        user_budget_id: req.session.user_id,
+        total_income: totalIncome,
+        total_expense: totalExpense,
+        total_savings: totalSavings,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    console.log(createBudget);
+    res.json(createBudget);
+  } catch (err) {
     console.log(err);
-     res.status(500).json(err);
-   }
- });
+    res.status(500).json(err);
+  }
+});
 
 router.delete("/", async (req, res) => {
   try {
