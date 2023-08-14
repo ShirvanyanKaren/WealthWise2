@@ -121,30 +121,41 @@ router.put("/:id", async (req, res) => {
     console.log(totalExpense);
     console.log(totalIncome);
      
-    const [budgetData] = await Promise.all([
+    const [expenseByCat] = await Promise.all([
+      Expense.findAll({
+        attributes: ['category', 'amount'], 
+        where: { budget_id: req.session.budget_id }
+      })
+    ]);
+
+    const [incomeByCat] = await Promise.all([
       Expense.findAll({
         attributes: ['category', 'amount'], 
         where: { budget_id: req.session.budget_id }
       })
     ]);
     
-    const totalExpenses = budgetData.reduce((result, expense) => {
+    const expenseSum = expenseByCat.reduce((result, expense) => {
       const existingCategory = result.find(item => item.category === expense.category);
-    
+  
       if (existingCategory) {
-        existingCategory.sum += expense.amount;
+          existingCategory.sum += expense.amount;
       } else {
-        result.push({ category: expense.category, sum: expense.amount });
+       
+          result.push({ category: expense.category, sum: expense.amount}); 
       }
-    
       return result;
-    }, []);
-    
-    console.log('totalExpenses:', totalExpenses);
-    
-    
+  }, []);
+
+  const expRat = expenseSum.map(expense => ({
+    category: expense.category,
+    ratio: expense.sum / totalExpense
+  }));
 
 
+  console.log('exp sum:', expenseSum);
+  console.log('exp ratios:', expRat);
+  
     const createBudget = await Budget.update(
        {
          user_budget_id: req.session.user_id,
