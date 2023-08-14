@@ -172,7 +172,8 @@ button:active {
 }
 
 .logout-confirm-container,
-.unauthorized-container {
+.unauthorized-container,
+.pnf-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
