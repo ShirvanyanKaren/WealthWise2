@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Model } = require("sequelize");
 const { User, Expense, Income, Budget } = require("../../models");
 const { useAuth } = require("../../utils/auth");
 
@@ -19,14 +20,14 @@ router.get("/", async (req, res) => {
           attributes: ["id", "username"],
           include: {
             model: Income,
-            attributes: ["id", "amount", "descrition", "category"],
+            attributes: ["id", "amount", "description", "category"],
             model: Expense,
-            attributes: ["id", "amount", "descrition", "category"],
+            attributes: ["id", "amount", "description", "category"],
           },
         },
       ],
     });
-    res.json(userData);
+    res.json(budgetData);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -74,7 +75,7 @@ router.post("/", useAuth, async (req, res) => {
       const savedBudgets = foundBudgets.map((budget) =>
         budget.get({ plain: true })
       );
-
+    
       const budgetNameExists = savedBudgets.some(
         (budget) => budget.budget_name === req.body.newBudgetName
       );
@@ -106,25 +107,39 @@ router.post("/", useAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-      const createBudget = await Budget.update({
-          where : {
-              id: req.params.id,
-          },
-          budget_name: req.body.budget_name,
-          total_income : await Income.sum('amount', { where: {
-          id: req.params.id} }),
-          total_expense : await Expense.sum('amount', { where: {
-          id: req.params.id} }
-           ),
-           total_savings : total_income - total_expense
-      });
-      res.json(createBudget);
-  } catch (err) {
-      res.status(500).json(err)
-}
-})
+     const [incomeData, expenseData] = await Promise.all([
+       Income.sum("amount", { where: { budget_id: req.session.budget_id }}),
+      Expense.sum("amount", { where: { budget_id: req.session.budget_id }}),
+     ]);
+    console.log(incomeData, expenseData);
+    const totalIncome = incomeData 
+    const totalExpense = expenseData 
+
+    const totalSavings = totalIncome - totalExpense;
+    console.log(totalExpense);
+     console.log(totalIncome);
+    const createBudget = await Budget.update(
+       {
+         user_budget_id: req.session.user_id,
+         total_income: totalIncome,
+         total_expense: totalExpense,
+         total_savings: totalSavings,
+       },
+       {
+         where: {
+           id: req.params.id,
+         },
+       }
+     );
+     console.log(createBudget);
+     res.json(createBudget);
+   } catch (err) {
+    console.log(err);
+     res.status(500).json(err);
+   }
+ });
 
 router.delete("/", async (req, res) => {
   try {

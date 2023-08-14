@@ -16,9 +16,9 @@ router.get('/', useAuth, async (req, res) => {
                 'category',
                 'date'
             ],
-            where: {
-                user_expense_id: userId,
-            }, 
+            // where: {
+            //     user_expense_id: userId,
+            // }, 
             include: [
                 {
                     model: User,
@@ -79,7 +79,7 @@ router.post('/', useAuth, async (req, res) => {
             amount: req.body.amount,
             category: req.body.category,
             user_expense_id: req.session.user_id,
-            budget_id: req.body.budget_id
+            budget_id: req.session.budget_id
         });
         console.log(createExpense);
         res.json(createExpense);
