@@ -45,6 +45,20 @@ Budget.init(
     },
   },
   {
+    hooks: {
+      async beforeCreate(newBudgetData) {
+        if (typeof newBudgetData.total_expense === 'number') {
+          newBudgetData.total_expense = parseFloat(newBudgetData.total_expense).toFixed(2);
+        }
+        if (typeof newBudgetData.total_income === 'number') {
+          newBudgetData.total_income = parseFloat(newBudgetData.total_income).toFixed(2);
+        }
+        if (typeof newBudgetData.total_savings === 'number') {
+          newBudgetData.total_savings = parseFloat(newBudgetData.total_savings).toFixed(2);
+        }
+        return newBudgetData;
+      }
+    },
     sequelize,
     timestamps: false,
     freezeTableName: true,

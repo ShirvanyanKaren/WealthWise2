@@ -28,19 +28,19 @@ Expense.belongsTo(User, {
 });
 
 Budget.hasMany(Income, {
-    foreignKey: 'user_budget_id',
+    foreignKey: 'budget_id',
 });
 
 Income.belongsTo(Budget, {
-    foreignKey: 'user_budget_id',
+    foreignKey: 'budget_id',
 });
 
 Budget.hasMany(Expense, {
-    foreignKey: 'user_budget_id',
+    foreignKey: 'budget_id',
 });
 
 Expense.belongsTo(Budget, {
-    foreignKey: 'user_budget_id',
+    foreignKey: 'budget_id',
 });
 
 module.exports = {
