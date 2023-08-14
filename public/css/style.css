@@ -165,11 +165,11 @@ button:active {
   text-align: center;
 }
 
-.income, .expense{
+.income,
+.expense {
   margin: 1rem;
   width: 30%;
 }
-
 
 .logout-confirm-container,
 .unauthorized-container {
@@ -309,13 +309,14 @@ footer p {
     width: 50%;
   }
 
-  .create-budget-section{
+  .create-budget-section {
     flex-direction: column;
     align-items: center;
     margin-top: 1rem;
   }
 
-  .income, .expense{
+  .income,
+  .expense {
     width: 80%;
   }
 

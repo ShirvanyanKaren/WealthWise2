@@ -53,11 +53,26 @@ Expense.init(
   {
     hooks: {
       async beforeCreate(newExpenseData) {
-        if(newExpenseData.description === null) {
+        if (newExpenseData.description === null) {
           newExpenseData.description = "No description provided.";
         }
+        if (newExpenseData.description.length > 255) {
+          newExpenseData.description = newExpenseData.description.substring(
+            0,
+            255
+          );
+        }
+        if (newExpenseData.description.length < 1) {
+          newExpenseData.description = "No description provided.";
+        }
+        if (newExpenseData.amount === null) {
+          newExpenseData.amount = 0.0;
+        }
+        if (typeof newExpenseData.amount === "number") {
+          newExpenseData.amount = parseFloat(newExpenseData.amount).toFixed(2);
+        }
         return newExpenseData;
-      }
+      },
     },
     sequelize,
     timestamps: false,
