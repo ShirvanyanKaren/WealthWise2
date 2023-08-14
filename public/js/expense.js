@@ -1,3 +1,5 @@
+const expenseTable = document.querySelector("#expense-table");
+
 const expenseFormHandler = async (event) => {
   event.preventDefault();
 
@@ -35,6 +37,7 @@ const expenseFormHandler = async (event) => {
     if (response.ok) {
       expenseResult.textContent = "Added Expense Item";
       expenseResult.style.color = "green";
+      createExpenseTable(expenseTable, "/api/expense");
     } else {
       expenseResult.textContent = response.statusText;
       expenseResult.style.color = "red";
@@ -42,6 +45,31 @@ const expenseFormHandler = async (event) => {
   }
 };
 
+const createExpenseTable = async (location, path) => {
+  const tableData = await getTableData(path);
+  if (!tableData) {
+    return;
+  }
+  new Tabulator(location, {
+    data: tableData,
+    resizableColumnFit:true,
+    columns: [
+      { title: "ID", field: "id" },
+      { title: "Expense Name", field: "expense_name" },
+      {
+        title: "Amount",
+        field: "amount",
+        formatter: "money",
+        formatterParams: { precision: 2, symbol: "$" },
+      },
+    ],
+  });
+};
+
 document
   .querySelector(".expense")
   .addEventListener("submit", expenseFormHandler);
+
+document.addEventListener("DOMContentLoaded", () => {
+  createExpenseTable(expenseTable, "/api/expense");
+});

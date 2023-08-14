@@ -5,7 +5,7 @@ const { useAuth } = require('../utils/auth');
 
 router.get('/', useAuth, async (req, res) => {
   try {
-    res.render('budget', {
+    res.render('nameBudget', {
         logged_in: req.session.logged_in,
     })
     console.log(res);

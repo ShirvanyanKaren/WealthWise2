@@ -4,6 +4,8 @@ const { useAuth } = require('../../utils/auth');
 
 router.get('/', useAuth, async (req, res) => {
     try {
+        const userId = req.session.user_id;
+
         const expenseData = await Expense.findAll({
             attributes: [
                 'id',
@@ -14,22 +16,26 @@ router.get('/', useAuth, async (req, res) => {
                 'category',
                 'date'
             ],
+            where: {
+                user_expense_id: userId,
+            }, 
             include: [
                 {
-                model: User,
-                attributes: [
-                    'id',
-                    'username'
-                ]
-            }
-        ],
+                    model: User,
+                    attributes: [
+                        'id',
+                        'username'
+                    ]
+                }
+            ],
         });
+
         res.json(expenseData);
     } catch (err) {
         res.status(500).json(err);
     }
-
 });
+
 
 router.get('/:id', useAuth, async (req, res) => {
     try {
