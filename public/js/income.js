@@ -1,4 +1,3 @@
-
 const incomeFormHandler = async (event) => {
   event.preventDefault();
 
@@ -6,6 +5,19 @@ const incomeFormHandler = async (event) => {
   const amount = document.querySelector("#income-amount").value;
   const category = document.querySelector("#income-category").value;
   const description = document.querySelector("#income-desc").value;
+  const incomeResult = document.querySelector(".income-result");
+
+  if (isNaN(amount)) {
+    incomeResult.textContent = "Please enter a valid amount.";
+    incomeResult.style.color = "red";
+    return;
+  }
+
+  if (!income_name) {
+    incomeResult.textContent = "Please enter a valid income name.";
+    incomeResult.style.color = "red";
+    return;
+  }
 
   if (income_name && amount && category) {
     const response = await fetch("/api/revenue", {
@@ -14,26 +26,20 @@ const incomeFormHandler = async (event) => {
         income_name,
         description,
         amount,
-        category
-        
+        category,
       }),
       headers: {
-        'Content-Type': 'application/json'
-    },
+        "Content-Type": "application/json",
+      },
     });
     if (response.ok) {
-        console.log('added income');
-      } else {
-        console.log(income_name);
-        console.log(income_amount);
-        console.log(category);
-        console.log(description);
-        alert('Failed to add income');
-      }
+      incomeResult.textContent = "Added Income Item";
+      incomeResult.style.color = "green";
+    } else {
+      incomeResult.textContent = response.statusText;
+      incomeResult.style.color = "red";
+    }
   }
 };
 
-document
-  .querySelector(".income")
-  .addEventListener("submit", incomeFormHandler);
-  
+document.querySelector(".income").addEventListener("submit", incomeFormHandler);

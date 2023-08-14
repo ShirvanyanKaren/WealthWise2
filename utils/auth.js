@@ -1,4 +1,4 @@
-const toggleAuth = true;
+const toggleAuth = false;
 
 const useAuth = (req, res, next) => {
   const shouldAuthenticate = toggleAuth && !req.session.logged_in;
