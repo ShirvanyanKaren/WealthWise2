@@ -8,7 +8,7 @@ const incomeFormHandler = async (event) => {
   const description = document.querySelector("#income-desc").value;
   const incomeResult = document.querySelector(".income-result");
   
-  await incomeTable.redraw(true);
+  // await incomeTable.redraw(true);
 
   if (isNaN(amount)) {
     incomeResult.textContent = "Please enter a valid amount.";
