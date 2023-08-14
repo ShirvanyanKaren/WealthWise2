@@ -83,7 +83,8 @@ router.post('/', useAuth, async (req, res) => {
             description: req.body.description,
             amount: req.body.amount,
             category: req.body.category,
-            user_income_id: req.session.user_id
+            user_income_id: req.session.user_id,
+            budget_id: req.body.budget_id
         });
         console.log(createIncome);
         res.json(createIncome);

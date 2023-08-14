@@ -106,18 +106,29 @@ router.post("/", useAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-router.put("/", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const updateBudget = await Budget.findAll({});
+      const createBudget = await Budget.update({
+          where : {
+              id: req.params.id,
+          },
+          budget_name: req.body.budget_name,
+          total_income : await Income.sum('amount', { where: {
+          id: req.params.id} }),
+          total_expense : await Expense.sum('amount', { where: {
+          id: req.params.id} }
+           ),
+           total_savings : total_income - total_expense
+      });
+      res.json(createBudget);
   } catch (err) {
-    res.status(500).json(err);
-  }
-});
+      res.status(500).json(err)
+}
+})
 
 router.delete("/", async (req, res) => {
   try {
-    const deleteBudget = await Budget.findAll({});
+    const deleteBudget = await Budget.destroy({});
   } catch (err) {
     res.status(500).json(err);
   }

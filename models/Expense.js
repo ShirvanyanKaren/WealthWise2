@@ -29,7 +29,7 @@ Expense.init(
       type: DataTypes.INTEGER,
       references: {
         model: "budget",
-        key: "id",
+        key: "id", 
       },
     },
     amount: {
