@@ -47,6 +47,23 @@ router.get("/items", useAuth, async (req, res) => {
   }
 });
 
+router.get("/items/:id", useAuth, async (req, res) => {
+  try {
+
+    req.session.budget_id = req.params.id;
+    req.session.save();
+
+    console.log(req.session.budget_id)
+    
+    res.render("items", {
+      logged_in: req.session.logged_in,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 router.get("/budget", useAuth, async (req, res) => {
   try {
     res.render("budgetAnalysis", {

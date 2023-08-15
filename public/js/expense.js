@@ -60,6 +60,9 @@ const deleteButtonFormatter = (cell, formatterParams, onRendered) => {
 };
 
 const createExpenseTable = async () => {
+
+  
+
   const data = await getTableData("/api/expense");
   expenseTable = new Tabulator(expenseTableEL, {
     data: data,
