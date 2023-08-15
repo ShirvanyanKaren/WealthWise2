@@ -1,10 +1,29 @@
-let data;
+const incomeChart = document.querySelector("#income-chart");
+const expenseChart = document.querySelector("#expense-chart");
+const overviewTable = document.querySelector("#overview-table");
+
+const colors = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#33FF99",
+  "#9966FF",
+  "#FF5733",
+  "#4CAF50",
+  "#FFC0CB",
+  "#8A2BE2",
+  "#00FFFF",
+  "#FF4500",
+  "#ADFF2F",
+  "#9370DB",
+  "#7FFF00",
+  "#8B4513",
+  "#FFD700",
+];
 
 const getIncomeItems = async (user_id, budget_id) => {
   try {
-    const user = user_id;
-    const budget = budget_id;
-    const response = await fetch(`/api/revenue/${user}/${budget_id}`, {
+    const response = await fetch(`/api/revenue/${user_id}/${budget_id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -16,9 +35,7 @@ const getIncomeItems = async (user_id, budget_id) => {
 
 const getExpenseItems = async (user_id, budget_id) => {
   try {
-    const user = user_id;
-    const budget = budget_id;
-    const response = await fetch(`/api/expense/${user}/${budget}`, {
+    const response = await fetch(`/api/expense/${user_id}/${budget_id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -30,9 +47,7 @@ const getExpenseItems = async (user_id, budget_id) => {
 
 const getCurrentBudget = async (user_id, budget_id) => {
   try {
-    const user = user_id;
-    const budget = budget_id;
-    const response = await fetch(`/api/budget/${user}/${budget}`, {
+    const response = await fetch(`/api/budget/${user_id}/${budget_id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -43,10 +58,9 @@ const getCurrentBudget = async (user_id, budget_id) => {
 };
 
 const requestHandler = async (user_id, budget_id) => {
-  let dataOne, dataTwo, dataThree; // Declare variables here
+  let dataOne, dataTwo, dataThree;
 
   try {
-    console.log(user_id, budget_id);
     const [responseOne, responseTwo, responseThree] = await Promise.all([
       getIncomeItems(user_id, budget_id),
       getExpenseItems(user_id, budget_id),
@@ -59,9 +73,6 @@ const requestHandler = async (user_id, budget_id) => {
   } catch (error) {
     console.log(error);
   }
-
-  console.log(dataOne, dataTwo, dataThree);
-
   const data = { dataOne, dataTwo, dataThree };
   return data;
 };
@@ -74,14 +85,83 @@ const getSession = async () => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
-      return requestHandler(data.user_id, data.budget_id);
+      return data;
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-  getSession();
+const calculateCategoryTotals = async (data) => {
+  const categoryTotals = {};
+  let totalAmount = 0;
+
+  for (const item of data) {
+    const { category, amount } = item;
+    totalAmount += amount;
+    categoryTotals[category] = (categoryTotals[category] || 0) + amount;
+  }
+
+  const categoryPercentages = {};
+  for (const category in categoryTotals) {
+    const percentage = (categoryTotals[category] / totalAmount) * 100;
+    categoryPercentages[category] = percentage.toFixed(2);
+  }
+
+  return {
+    totals: categoryTotals,
+    percentages: categoryPercentages,
+  };
+};
+
+const renderIncomeChart = async (data) => {
+  const labels = Object.keys(data.totals);
+  const values = Object.values(data.totals);
+  const chartData = {
+    labels: labels,
+    datasets: [
+      {
+        data: values,
+        backgroundColor: colors,
+        hoverBackgroundColor: colors,
+      },
+    ],
+  };
+  const incomeChartVar = new Chart(incomeChart, {
+    type: "pie",
+    data: chartData,
+  });
+};
+
+const renderExpenseChart = async (data) => {
+  const labels = Object.keys(data.totals);
+  const values = Object.values(data.totals);
+  const chartData = {
+    labels: labels,
+    datasets: [
+      {
+        data: values,
+        backgroundColor: colors,
+        hoverBackgroundColor: colors,
+      },
+    ],
+  };
+  const expenseChartVar = new Chart(expenseChart, {
+    type: "pie",
+    data: chartData,
+  });
+};
+
+const init = async () => {
+  const session = await getSession();
+  const budgetData = await requestHandler(session.user_id, session.budget_id);
+  const incomeCategoryData = await calculateCategoryTotals(budgetData.dataOne);
+  const expenseCategoryData = await calculateCategoryTotals(budgetData.dataTwo);
+  const budget = budgetData.dataThree;
+  await renderIncomeChart(incomeCategoryData);
+  await renderExpenseChart(expenseCategoryData);
+};
+
+document.addEventListener("DOMContentLoaded", async function () {
+  init();
 });
