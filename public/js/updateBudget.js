@@ -1,31 +1,19 @@
-const updateNewBudget = document.querySelector("#budget-update");
+const submitBudgetEl = document.querySelector("#submit-budget");
 
-const updateBudgetHandler = async (event) => {
-    event.preventDefault();
-    try {
-       
-        const sessionResponse = await fetch("/api/session/current");
-        console.log(sessionResponse);
-        if (sessionResponse.ok) {
-            const sessionData = await sessionResponse.json();
-            console.log(sessionData);
-
-            const response = await fetch(`/api/budget/${sessionData.budget_id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (response.ok) {
-                // add pahe to go to
-            } else {
-                // error handling
-            }
-        } else {
-
-        }
-    } catch (err) {
-        console.log(err);
+const submitBudget = async (event) => {
+  event.preventDefault();
+  const sessionResponse = await fetch("/api/session/current");
+  if (sessionResponse.ok) {
+    const sessionR = await sessionResponse.json();
+    console.log(sessionR);
+    const response = await fetch(`/api/budget/${sessionR.budget_id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) {
+      document.location.replace("/budget");
     }
+  }
 };
 
-updateNewBudget.addEventListener("submit", updateBudgetHandler);
+submitBudgetEl.addEventListener("click", submitBudget);

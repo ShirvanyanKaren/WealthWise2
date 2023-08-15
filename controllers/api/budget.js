@@ -75,6 +75,43 @@ router.get("/:id", useAuth, async (req, res) => {
   }
 });
 
+router.get("/:user/:budgetid", useAuth, async (req, res) => {
+  try {
+    const singleBudget = await Budget.findOne({
+      attributes: [
+        "id",
+        "budget_name",
+        "total_expense",
+        "total_income",
+        "total_savings",
+      ],
+      where: {
+        user_budget_id: req.params.user,
+        id: req.params.budgetid,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "username"],
+          include: [
+            {
+              model: Income,
+              attributes: ["id", "amount", "description", "category"],
+            },
+            {
+              model: Expense,
+              attributes: ["id", "amount", "description", "category"],
+            },
+          ],
+        },
+      ],
+    });
+    res.json(singleBudget);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
 router.post("/", useAuth, async (req, res) => {
   try {
@@ -119,97 +156,83 @@ router.post("/", useAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
-router.put("/:id", async (req, res) => {
+
+router.put("/:id", useAuth, async (req, res) => {
   try {
     const [incomeData, expenseData] = await Promise.all([
       Income.sum("amount", { where: { budget_id: req.session.budget_id } }),
       Expense.sum("amount", { where: { budget_id: req.session.budget_id } }),
     ]);
-    console.log(incomeData, expenseData);
     const totalIncome = incomeData;
     const totalExpense = expenseData;
     const totalSavings = totalIncome - totalExpense;
-    console.log(totalExpense);
-    console.log(totalIncome);
 
-    const [expenseByCat] = await Promise.all([
-      Expense.findAll({
-        attributes: ["category", "amount"],
-        where: { budget_id: req.session.budget_id },
-      }),
-    ]);
+    // const [expenseByCat] = await Promise.all([
+    //   Expense.findAll({
+    //     attributes: ["category", "amount"],
+    //     where: { budget_id: req.session.budget_id },
+    //   }),
+    // ]);
 
-    const expenseSum = expenseByCat.reduce((result, expense) => {
-      const existingCategory = result.find(
-        (item) => item.category === expense.category
-      );
+    // const expenseSum = expenseByCat.reduce((result, expense) => {
+    //   const existingCategory = result.find(
+    //     (item) => item.category === expense.category
+    //   );
 
-      if (existingCategory) {
-        existingCategory.sum += expense.amount;
-      } else {
-        result.push({ category: expense.category, sum: expense.amount });
-      }
-      return result;
-    }, []);
+    //   if (existingCategory) {
+    //     existingCategory.sum += expense.amount;
+    //   } else {
+    //     result.push({ category: expense.category, sum: expense.amount });
+    //   }
+    //   return result;
+    // }, []);
 
-    const [incomeByCat] = await Promise.all([
-      Income.findAll({
-        attributes: ["category", "amount"],
-        where: { budget_id: req.session.budget_id },
-      }),
-    ]);
+    // const [incomeByCat] = await Promise.all([
+    //   Income.findAll({
+    //     attributes: ["category", "amount"],
+    //     where: { budget_id: req.session.budget_id },
+    //   }),
+    // ]);
 
-    const incomeSum = incomeByCat.reduce((result, income) => {
-      const existingCategory = result.find(
-        (item) => item.category === income.category
-      );
+    // const incomeSum = incomeByCat.reduce((result, income) => {
+    //   const existingCategory = result.find(
+    //     (item) => item.category === income.category
+    //   );
 
-      if (existingCategory) {
-        existingCategory.sum += income.amount;
-      } else {
-        result.push({ category: income.category, sum: income.amount });
-      }
-      return result;
-    }, []);
+    //   if (existingCategory) {
+    //     existingCategory.sum += income.amount;
+    //   } else {
+    //     result.push({ category: income.category, sum: income.amount });
+    //   }
+    //   return result;
+    // }, []);
 
-    const incRat = incomeSum.map((income) => ({
-      category: income.category,
-      ratio: income.sum / totalIncome,
-    }));
+    // const incRat = incomeSum.map((income) => ({
+    //   category: income.category,
+    //   ratio: income.sum / totalIncome,
+    // }));
 
-    const expRat = expenseSum.map((expense) => ({
-      category: expense.category,
-      ratio: expense.sum / totalExpense,
-    }));
+    // const expRat = expenseSum.map((expense) => ({
+    //   category: expense.category,
+    //   ratio: expense.sum / totalExpense,
+    // }));
 
-    const budgetRat = expenseSum.map((expense) => ({
-      category: expense.category,
-      ratio: expense.sum / totalIncome,
-    }));
+    // const budgetRat = expenseSum.map((expense) => ({
+    //   category: expense.category,
+    //   ratio: expense.sum / totalIncome,
+    // }));
 
+    // req.session.save(() => {
+    //   req.session.income = incRat,
+    //   req.session.expense = expRat,
+    //   req.session.budget = budgetRat,
+    //   req.session.logged_in = true;
+    // });
 
-    req.session.save(() => {
-      req.session.income = incRat,
-      req.session.expense = expRat,
-      req.session.budget = budgetRat,
-      req.session.logged_in = true;
-      res.status(200).json(incRat);
-      res.status(200).json(expRat);
-      res.status(200).json(budgetRat);
-    });
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-    console.log('exp sum', expenseSum);
-
-    console.log('exp ratios:', expRat);
-
-    console.log("inc sum:", incomeSum);
-    
-    console.log("inc ratios:", incRat);
-
-    console.log('budg rat:', budgetRat);
-
-
-
+    // console.log(req.session.user_id);
+    // console.log(req.session.budget_id);
 
     const createBudget = await Budget.update(
       {
@@ -225,7 +248,7 @@ router.put("/:id", async (req, res) => {
       }
     );
     console.log(createBudget);
-    res.json(createBudget);
+    res.status(200).json(createBudget);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
