@@ -196,10 +196,6 @@ const renderExpenseBar = async (data) => {
   });
 }
 
-
-
-
-
 const init = async () => {
   const session = await getSession();
   const budgetData = await requestHandler(session.user_id, session.budget_id);
