@@ -45,6 +45,3 @@ document
   .querySelector(".login-form")
   .addEventListener("submit", loginFormHandler);
 
-document.querySelector("#signUp").addEventListener("click", function () {
-  document.location.replace("/signup");
-});
