@@ -16,9 +16,10 @@ router.get('/', useAuth, async (req, res) => {
                 'category',
                 'date'
             ],
-            // where: {
-            //     user_expense_id: userId,
-            // }, 
+            where: {
+                user_expense_id: userId,
+                budget_id: req.session.budget_id,
+            }, 
             include: [
                 {
                     model: User,
