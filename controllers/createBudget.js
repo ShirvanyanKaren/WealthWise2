@@ -1,11 +1,22 @@
 const router = require("express").Router();
-const { Expense, Income, User } = require("../models");
+const { Budget } = require("../models");
 const { useAuth } = require("../utils/auth");
 
 router.get("/", useAuth, async (req, res) => {
   try {
+    
+    const userBudgetData = await Budget.findAll({
+      where: {
+        user_budget_id: req.session.user_id,
+      },
+    });
+
+    const budgets = userBudgetData.map((budget) => budget.get({ plain: true }));
+    console.log(budgets);
+
     res.render("nameBudget", {
       logged_in: req.session.logged_in,
+      budgets,
     });
     console.log(res);
   } catch (error) {
@@ -14,3 +25,8 @@ router.get("/", useAuth, async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+

@@ -1,5 +1,7 @@
+
 const newBudgetForm = document.querySelector("#new-budget-form");
 const errorElement = document.querySelector("#error-message");
+const dropdown = document.querySelector("#budgetDropdown");
 
 const newBudgetHandler = async (event) => {
   event.preventDefault();
@@ -36,5 +38,13 @@ const newBudgetHandler = async (event) => {
     console.log(err);
   }
 };
+
+dropdown.addEventListener("change", (event) => {
+  console.log(event.target.value);
+  const budgetId = event.target.value;
+  if (budgetId) {
+    document.location.replace(`/items/${budgetId}`);
+  }
+});
 
 newBudgetForm.addEventListener("submit", newBudgetHandler);
