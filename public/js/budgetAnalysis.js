@@ -185,25 +185,6 @@ const renderOverviewTable = async (data) => {
       { title: "User ID", field: "user_id", visible: false },
       { title: "Budget ID", field: "budget_id", visible: false },
       { title: "Description", field: "description" },
-      {
-        formatter: "buttonCross",
-        width: 40,
-        hozAlign: "center",
-        vertAlign: "center",
-        resizable: false,
-        cellClick: function (e, cell) {
-          e.preventDefault();
-          let id = cell.getRow().getData().id;
-          cell.getRow().delete();
-          deleteExpenseFromDb(id);
-        },
-        cellTap: function (e, cell) {
-          e.preventDefault();
-          let id = cell.getRow().getData().id;
-          cell.getRow().delete();
-          deleteIncomeFromDb(id);
-        },
-      },
     ],
   });
 };
