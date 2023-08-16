@@ -182,7 +182,7 @@ const renderExpenseBar = async (data) => {
   const chartData = {
     labels: labels,
     datasets: [{
-      label: 'Income by Category',
+      label: 'Expense by Category',
       data: values,
       backgroundColor: colors,
       borderColor: colors,

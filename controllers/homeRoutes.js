@@ -1,12 +1,50 @@
 const router = require("express").Router();
+const { User, Expense, Income, Budget } = require("../models");
 const { useAuth } = require("../utils/auth");
 
 router.get("/", async (req, res) => {
   try {
+    if (req.session.user_id) {
+    const userBudgets = await Budget.findAll({
+      attributes: [
+        "id",
+        "budget_name",
+        "total_expense",
+        "total_income",
+        "total_savings",
+      ],
+      where: {
+        user_budget_id: req.session.user_id,
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "username"],
+          include: [
+            {
+              model: Income,
+              attributes: ["id", "amount", "description", "category"],
+            },
+            {
+              model: Expense,
+              attributes: ["id", "amount", "description", "category"],
+            },
+          ],
+        },
+      ],
+    });
+    const budgets = userBudgets.map((budget) => budget.get({ plain: true }));
+    console.log(budgets);
+  
     res.render("homepage", {
+      budgets,
       logged_in: req.session.logged_in,
     });
+  } else {
+    res.render("homepage");
+  }
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
