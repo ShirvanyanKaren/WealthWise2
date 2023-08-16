@@ -4,7 +4,6 @@ const { useAuth } = require("../../utils/auth");
 
 router.get("/", useAuth, async (req, res) => {
   try {
-    const userId = req.session.user_id;
 
     const expenseData = await Expense.findAll({
       attributes: [
@@ -17,7 +16,7 @@ router.get("/", useAuth, async (req, res) => {
         "date",
       ],
       where: {
-        user_expense_id: userId,
+        user_expense_id: req.session.user_id,
         budget_id: req.session.budget_id,
       },
       include: [
@@ -34,34 +33,17 @@ router.get("/", useAuth, async (req, res) => {
   }
 });
 
-router.get("/:id", useAuth, async (req, res) => {
-  try {
-    const findExpense = await Expense.findOne({
-      attributes: [
-        "id",
-        "expense_name",
-        "user_expense_id",
-        "amount",
-        "description",
-        "category",
-        "date",
-      ],
-      where: {
-        id: req.params.id,
-      },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "username"],
-        },
-      ],
-    });
-    console.log(findExpense);
-    res.json(findExpense);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+// router.get("/:id", useAuth, async (req, res) => {
+//   try {
+//     await session.save({
+//       user_id: req.session.user_id,
+//       budget_id: req.params.id,
+//     });
+//     res.json(session);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 router.get("/:user/:budget", useAuth, async (req, res) => {
   try {
@@ -71,7 +53,7 @@ router.get("/:user/:budget", useAuth, async (req, res) => {
         budget_id: req.params.budget,
       },
     });
-    
+
     res.json(findExpense);
   } catch (err) {
     res.status(500).json(err);
@@ -112,11 +94,9 @@ router.put("/:id", useAuth, async (req, res) => {
       }
     );
     if (updateExpense[0] === 0) {
-      res
-        .status(400)
-        .json({
-          message: "Please provide a name, category, and amount to the expense",
-        });
+      res.status(400).json({
+        message: "Please provide a name, category, and amount to the expense",
+      });
     }
     console.log(updateExpense);
     res.json(updateExpense);

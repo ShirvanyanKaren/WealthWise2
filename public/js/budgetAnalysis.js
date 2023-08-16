@@ -22,6 +22,9 @@ const colors = [
   "#FFD700",
 ];
 
+let table;
+
+
 const getIncomeItems = async (user_id, budget_id) => {
   try {
     const response = await fetch(`/api/revenue/${user_id}/${budget_id}`, {
@@ -153,6 +156,54 @@ const renderExpenseChart = async (data) => {
   });
 };
 
+const renderOverviewTable = async (data) => {
+  const dataObj = [
+    ...data.dataOne.map(({ income_name, user_income_id, ...rest }) => ({
+      ...rest,
+      name: income_name,
+      user_id: user_income_id,
+      type: 'Income'
+    })),
+    ...data.dataTwo.map(({ expense_name, user_expense_id, ...rest }) => ({
+      ...rest,
+      name: expense_name,
+      user_id: user_expense_id,
+      type: 'Expense'
+    }))
+  ];
+
+  console.log(dataObj);
+
+  table = new Tabulator("#overview-table", {
+    data: dataObj,
+    layout: "fitColumns",
+    columns: [
+      { title: "ID", field: "id", visible: false },
+      { title: "Name", field: "name" },
+      { title: "Amount", field: "amount" },
+      { title: "Category", field: "category" },
+      { title: "Type", field: "type" },
+      { title: "User ID", field: "user_id", visible: false },
+      { title: "Budget ID", field: "budget_id", visible: false },
+      { title: "Description", field: "description" },
+    ],
+  });
+};
+    
+const deleteExpenseFromDb = async (id) => {
+  const response = await fetch(`/api/expense/${id}`, {
+    method: "DELETE",
+  });
+
+  if (response.ok) {
+    expenseResult.textContent = "Deleted Expense Item.";
+    expenseResult.style.color = "green";
+  } else {
+    console.log(response);
+    expenseResult.textContent = response.statusText;
+    expenseResult.style.color = "red";
+  }
+};
 
 const renderIncomeBar = async (data) => {
   const labels = Object.keys(data.totals);
@@ -203,11 +254,13 @@ const renderExpenseBar = async (data) => {
 const init = async () => {
   const session = await getSession();
   const budgetData = await requestHandler(session.user_id, session.budget_id);
+  console.log(budgetData);
   const incomeCategoryData = await calculateCategoryTotals(budgetData.dataOne);
   const expenseCategoryData = await calculateCategoryTotals(budgetData.dataTwo);
   const budget = budgetData.dataThree;
   await renderIncomeChart(incomeCategoryData);
   await renderExpenseChart(expenseCategoryData);
+  await renderOverviewTable(budgetData);
   await renderIncomeBar(incomeCategoryData); 
   await renderExpenseBar(expenseCategoryData);
   await renderTable();
