@@ -1,6 +1,7 @@
 const incomeChart = document.querySelector("#income-chart");
 const expenseChart = document.querySelector("#expense-chart");
-const overviewTable = document.querySelector("#overview-table");
+const incomeBar = document.querySelector("#income-bar-chart");
+const expenseBar = document.querySelector("#expense-bar-chart");
 
 const colors = [
   "#FF6384",
@@ -149,7 +150,7 @@ const renderExpenseChart = async (data) => {
       },
     ],
   };
-  const expenseChartVar = new Chart(expenseChart, {
+  const expenseChartVar = new Chart( expenseChart, {
     type: "pie",
     data: chartData,
   });
@@ -204,6 +205,52 @@ const deleteExpenseFromDb = async (id) => {
   }
 };
 
+const renderIncomeBar = async (data) => {
+  const labels = Object.keys(data.totals);
+  const values = Object.values(data.totals);
+  
+  const chartData = {
+    labels: labels,
+    datasets: [{
+      label: 'Income by Category',
+      data: values,
+      backgroundColor: colors,
+      borderColor: colors,
+      borderWidth: 1,
+    }
+  ],
+  };
+  const expenseChartVar = new Chart( incomeBar, {
+    type: "bar",
+    data: chartData,
+  });
+}
+
+const renderExpenseBar = async (data) => {
+  const labels = Object.keys(data.totals);
+  const values = Object.values(data.totals);
+  
+  const chartData = {
+    labels: labels,
+    datasets: [{
+      label: 'Income by Category',
+      data: values,
+      backgroundColor: colors,
+      borderColor: colors,
+      borderWidth: 1,
+    }
+  ],
+  };
+  const expenseChartVar = new Chart( expenseBar, {
+    type: "bar",
+    data: chartData,
+  });
+}
+
+
+
+
+
 const init = async () => {
   const session = await getSession();
   const budgetData = await requestHandler(session.user_id, session.budget_id);
@@ -214,6 +261,9 @@ const init = async () => {
   await renderIncomeChart(incomeCategoryData);
   await renderExpenseChart(expenseCategoryData);
   await renderOverviewTable(budgetData);
+  await renderIncomeBar(incomeCategoryData); 
+  await renderExpenseBar(expenseCategoryData);
+  await renderTable();
 };
 
 document.addEventListener("DOMContentLoaded", async function () {
