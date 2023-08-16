@@ -36,8 +36,16 @@
                 >SignUp</span></a></li>
           {{else}}
             <li class="nav-item"><a href="/create"><span
-                  aria-hidden="true"
-                >Create/View Plans</span></a></li>
+                 aria-hidden="true"
+                >Create Budget</span></a></li>
+              <li class="nav-item dropdown">
+            <a href="#" class="dropbtn">View Budgets</a>
+            <div class="dropdown-content">
+              {{#each budgets as |budget|}}
+                <a href="/budget/{{id}}">{{budget_name}}</a>
+              {{/each}}
+              </div>
+              </li>
             <li class="nav-item"><a href="/logout"><span
                   aria-hidden="true"
                 >Logout</span></a></li>
